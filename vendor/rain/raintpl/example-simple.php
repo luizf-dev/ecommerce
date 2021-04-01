@@ -15,6 +15,8 @@
 
 	Tpl::configure( $config );
 
+	
+
 	// Add PathReplace plugin (necessary to load the CSS with path replace)
 	require_once('library/Rain/Tpl/Plugin/PathReplace.php');
 	Rain\Tpl::registerPlugin( new Rain\Tpl\Plugin\PathReplace() );
