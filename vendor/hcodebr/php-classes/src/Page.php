@@ -10,8 +10,7 @@ class Page {
     private $defaults = [
         "header"=>true,
         "footer"=>true,
-        "data"=>[]
-        
+        "data"=>[]        
     ];
 
     public function __construct($opts = array(),  $tpl_dir = "views/"){
@@ -50,7 +49,7 @@ class Page {
 
     public function __destruct(){
      
-        if ($this->options['footer'] === true) $this->tpl->draw("footer", false);
+        if ($this->options['footer'] === true) $this->tpl->draw("footer");
 
     }
 }
