@@ -38,15 +38,21 @@ $app->get('/admin/login/', function(){
 $app->post('/admin/login/', function(){
 
 	User::login($_POST['login'], $_POST['password']);
-	header("Location: ../../admin/");
+	header("Location: /ecommerce/admin/");
 	exit;
 });
 
 $app->get('/admin/logout/', function(){
 	User::logout();
 
-	header("Location: ../../admin/login/");
+	header("Location: /ecommerce/admin/login/");
 	exit;
+});
+
+$app->get("/admin/users/", function(){
+	User::verifyLogin();
+	$page = new PageAdmin();
+	$page->setTpl("users");
 });
 
 $app->run();
