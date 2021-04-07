@@ -88,6 +88,9 @@ $app->post("/admin/users/create/", function(){
 	User::verifyLogin();
 	$user = new User();
 	$_POST["inadmin"] = (isset($_POST["inadmin"]))?1:0;
+	$_POST['despassword'] = password_hash($_POST["despassword"], PASSWORD_DEFAULT, [
+		"cost"=>12
+	]);
 	$user->setData($_POST);
 	$user->save();
 	header("Location: /ecommerce/admin/users/");
@@ -104,9 +107,65 @@ $app->post("/admin/users/:iduser/", function($iduser){
 	$user->update();
 	header("Location: /ecommerce/admin/users/");
 	exit;
-
 });
 
+$app->get("/admin/forgot/", function(){
+	$page = new PageAdmin([
+		"header"=>false,
+		"footer"=>false
+	]);
+	$page->setTpl("forgot");
+});
+
+$app->post("/admin/forgot/", function(){
+	
+	$user = User::getForgot($_POST["email"]);
+	header("Location: /ecommerce/admin/forgot/sent/");
+	exit;
+});
+
+$app->get("/admin/forgot/sent/", function(){
+	$page = new PageAdmin([
+		"header"=>false,
+		"footer"=>false
+	]);
+	$page->setTpl("forgot-sent");
+});
+
+$app->get("/admin/forgot/reset/", function(){
+	$user = User::Senha($_GET["code"]);
+	$page = new PageAdmin([
+		"header"=>false,
+		"footer"=>false
+	]);
+	$page->setTpl("forgot-reset", array(
+		"name"=>$user["desperson"],
+		"code"=>$_GET["code"]
+	));
+});
+
+$app->post("/admin/forgot/reset/", function(){
+
+	$forgot = User::Senha($_POST["code"]);	
+
+	User::setFogotUsed($forgot["idrecovery"]);
+
+	$user = new User();
+
+	$user->get((int)$forgot["iduser"]);
+
+	$password = User::getPasswordHash($_POST["password"]);
+
+	$user->setPassword($password);
+
+	$page = new PageAdmin([
+		"header"=>false,
+		"footer"=>false
+	]);
+
+	$page->setTpl("forgot-reset-success");
+
+});
 
 $app->run();
 
