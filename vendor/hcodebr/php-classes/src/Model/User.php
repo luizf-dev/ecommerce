@@ -115,7 +115,7 @@ class User extends Model{
         ));
     }
 
-    public static function getForgot($email){
+    public static function getForgot($email, $inadmin = true){
         $sql = new Sql();
         $results = $sql->select("select * from tb_persons a inner join tb_users b using(idperson) where a.desemail = :email;", array(
             ":email"=>$email
@@ -138,11 +138,20 @@ class User extends Model{
 
             }else{
                 $dataRecovery = $results2[0];
-                
+              
                 $code = openssl_encrypt($dataRecovery['idrecovery'], 'AES-128-CBC', pack("a16", User::SECRET), 0, pack("a16", User::SECRET_IV));
                 $code = base64_encode($code);
 
-				$link = "http://localhost/ecommerce/admin/forgot/reset?code=$code";
+				/*$link = "http://localhost/ecommerce/admin/forgot/reset?code=$code";*/
+                if ($inadmin === true) {
+
+					$link = "http://localhost/ecommerce/admin/forgot/reset?code=$code";
+
+				} else {
+
+					$link = "http://localhost/ecommerce/forgot/reset?code=$code";
+					
+				}	
 					
                 $mailer = new Mailer($data["desemail"], $data["desperson"], "Redefinir Senha da Hcode Store", "forgot",
                  array(
@@ -157,8 +166,9 @@ class User extends Model{
 
     }
 
-    public static function Senha($code){
+    public static function recuperarSenha($code){
 
+        $code = str_replace(' ', '+', $code);
         $code = base64_decode($code);
         $idrecovery = openssl_decrypt($code, 'AES-128-CBC', pack("a16", User::SECRET), 0, pack("a16", User::SECRET_IV));
         
@@ -193,18 +203,16 @@ class User extends Model{
 
 		$sql = new Sql();
 
-		$sql->query("UPDATE tb_userspasswordsrecoveries SET dtrecovery = NOW() WHERE idrecovery = :idrecovery", array(
+		$sql->query("update tb_userspasswordsrecoveries set dtrecovery = now() where idrecovery = :idrecovery", array(
 			":idrecovery"=>$idrecovery
 		));
 
 	}
 
-	public function setPassword($password)
-	{
-
+	public function setPassword($password){
 		$sql = new Sql();
 
-		$sql->query("UPDATE tb_users SET despassword = :password WHERE iduser = :iduser", array(
+		$sql->query("update tb_users set despassword = :password where iduser = :iduser", array(
 			":password"=>$password,
 			":iduser"=>$this->getiduser()
 		));

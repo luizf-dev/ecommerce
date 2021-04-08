@@ -26,17 +26,31 @@
 <!-- Automatic element centering -->
 <div class="lockscreen-wrapper">
   <div class="lockscreen-logo">
-    <a href="/res/admin/index2.html"><b>Admin</b> Hcode Store</a>
+    <a href="/ecommerce/resources/admin/index2.html"><b>Admin</b><b> Hcode Store</b></a>
   </div>
-
-  <!-- /.lockscreen-item -->
-  <div class="help-block text-center">
-    <div class="callout callout-success">
-      <h4>E-mail enviado!</h4>
-
-      <p>Verifique as instruções no seu e-mail.</p>
+  
+   <div class="help-block text-center">
+    <b>Olá <?php echo htmlspecialchars( $name, ENT_COMPAT, 'UTF-8', FALSE ); ?>, digite uma nova senha:</b>
     </div>
+
+  <!-- START LOCK SCREEN ITEM -->
+  <div class="lockscreen-item">
+
+    <!-- lockscreen credentials (contains the form) -->
+    <form  action="/ecommerce/admin/forgot/reset/" method="post">
+      <input type="hidden" name="code" value="<?php echo htmlspecialchars( $code, ENT_COMPAT, 'UTF-8', FALSE ); ?>"> 
+      <div class="input-group">
+        <input type="password" class="form-control" placeholder="Digite a nova senha" name="password">
+        <div class="input-group-btn">
+          <button type="submit" class="btn"><i class="fa fa-arrow-right text-muted"></i></button>
+        </div>
+      </div>
+    </form>
+    <!-- /.lockscreen credentials -->
+
   </div>
+  <!-- /.lockscreen-item -->
+  
   <div class="lockscreen-footer text-center">
   <b>Copyright &copy; 2021</b> <b><a href="" class="text-black"></a></b><br>
   <b>All rights reserved</b>

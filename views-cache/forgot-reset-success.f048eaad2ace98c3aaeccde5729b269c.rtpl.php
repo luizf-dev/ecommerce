@@ -26,20 +26,19 @@
 <!-- Automatic element centering -->
 <div class="lockscreen-wrapper">
   <div class="lockscreen-logo">
-    <a href="/res/admin/index2.html"><b>Admin</b> Hcode Store</a>
+    <a href="/res/admin/index2.html"><b>Admin</b>LTE</a>
   </div>
 
   <!-- /.lockscreen-item -->
   <div class="help-block text-center">
     <div class="callout callout-success">
-      <h4>E-mail enviado!</h4>
-
-      <p>Verifique as instruções no seu e-mail.</p>
+      <h4>Senha Alterada!</h4>
+      <p>Tente fazer o login com sua nova senha.<br><a href="/ecommerce/admin/login/">Clique aqui</a> para fazer o login.</p>
     </div>
   </div>
   <div class="lockscreen-footer text-center">
-  <b>Copyright &copy; 2021</b> <b><a href="" class="text-black"></a></b><br>
-  <b>All rights reserved</b>
+    Copyright &copy; 2014-2016 <b><a href="http://almsaeedstudio.com" class="text-black">Almsaeed Studio</a></b><br>
+    All rights reserved
   </div>
 </div>
 <!-- /.center -->

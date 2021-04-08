@@ -132,21 +132,23 @@ $app->get("/admin/forgot/sent/", function(){
 	$page->setTpl("forgot-sent");
 });
 
-$app->get("/admin/forgot/reset/", function(){
-	$user = User::Senha($_GET["code"]);
+$app->get("/admin/forgot/reset", function(){
+	$user = User::recuperarSenha($_GET["code"]);	 
 	$page = new PageAdmin([
 		"header"=>false,
 		"footer"=>false
 	]);
-	$page->setTpl("forgot-reset", array(
+	$page->setTpl("forgot-reset" , array(
 		"name"=>$user["desperson"],
 		"code"=>$_GET["code"]
 	));
 });
 
+
+
 $app->post("/admin/forgot/reset/", function(){
 
-	$forgot = User::Senha($_POST["code"]);	
+	$forgot = User::recuperarSenha($_POST["code"]);	
 
 	User::setFogotUsed($forgot["idrecovery"]);
 
@@ -154,7 +156,10 @@ $app->post("/admin/forgot/reset/", function(){
 
 	$user->get((int)$forgot["iduser"]);
 
-	$password = User::getPasswordHash($_POST["password"]);
+	$password = password_hash($_POST["password"], PASSWORD_DEFAULT,[
+		"cost"=>12
+
+	]);
 
 	$user->setPassword($password);
 
