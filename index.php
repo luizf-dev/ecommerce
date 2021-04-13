@@ -7,6 +7,7 @@ use \Hcode\Page;
 use \Hcode\PageAdmin;
 use \Hcode\Model\User;
 use \Hcode\Model\Category;
+use \Hcode\Model\Product;
 
 $app = new Slim();
 
@@ -231,9 +232,66 @@ $app->get("/categories/:idcategory/", function($idcategory){
 	$page = new Page();
 	$page->setTpl("category", [
 		"category"=>$category->getValues(),
-		"procucts"=>[]
+		"products"=>[]
 	]);
 });
+
+$app->get("/admin/product/", function(){
+	User::verifyLogin();
+	$products = Product::listAll();
+	$page = new PageAdmin();
+	$page->setTpl("products", [
+		"products"=>$products
+	]);
+});
+
+$app->get("/admin/product/create/", function(){
+	User::verifyLogin();
+	$page = new PageAdmin();
+	$page->setTpl("products-create");
+});
+
+$app->post("/admin/product/create/", function(){
+	User::verifyLogin();
+	$product = new Product();
+	$product->setData($_POST);
+	$product->save();
+	header("Location: /ecommerce/admin/product/");
+	exit;
+});
+
+$app->get("/admin/product/:idproduct/", function($idproduct){
+	User::verifyLogin();
+	$product = new Product();
+	$product->get((int)$idproduct);
+	$page = new PageAdmin();
+	$page->setTpl("products-update", [
+		"products"=>$product->getValues()
+	]);
+});
+
+$app->post("/admin/product/:idproduct/", function($idproduct){
+	User::verifyLogin();
+	$product = new Product();
+	$product->get((int)$idproduct);
+	$product->setData($_POST);
+	$product->save();
+	$product->setPhoto($_FILES["file"]);
+	header("Location: /ecommerce/admin/product/");
+	exit;
+});
+
+$app->get("/admin/product/:idproduct/delete/", function($idproduct){
+	User::verifyLogin();
+	$product = new Product();
+	$product->get((int)$idproduct);
+	$product->delete();
+	header("Location: /ecommerce/admin/product/");
+	exit;
+
+});
+
+
 
 $app->run();
 
