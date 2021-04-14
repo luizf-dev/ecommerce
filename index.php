@@ -24,6 +24,16 @@ $app->get('/', function() {
 	]);
 });
 
+$app->get("/categories/:idcategory/", function($idcategory){
+	$category = new Category();
+	$category->get((int)$idcategory);
+	$page = new Page();
+	$page->setTpl("category", [
+		"category"=>$category->getValues(),
+		"products"=>Product::checkList($category->getProducts())
+	]);
+});
+
 $app->get('/admin/', function() {
 	User::verifyLogin();
 
@@ -231,15 +241,43 @@ $app->post("/admin/categories/:idcategory/", function($idcategory){
 	exit;
 });
 
-$app->get("/categories/:idcategory/", function($idcategory){
+
+
+$app->get("/admin/categories/:idcategory/product/", function($idcategory){
+	User::verifyLogin();
 	$category = new Category();
 	$category->get((int)$idcategory);
-	$page = new Page();
-	$page->setTpl("category", [
+	$page = new PageAdmin();
+	$page->setTpl("categories-products", [
 		"category"=>$category->getValues(),
-		"products"=>[]
+		"productsRelated"=>$category->getProducts(true),
+		"productsNotRelated"=>$category->getProducts(false)
 	]);
 });
+
+$app->get("/admin/categories/:idcategory/product/:idproduct/add/", function($idcategory, $idproduct){
+	User::verifyLogin();
+	$category = new Category();
+	$category->get((int)$idcategory);
+	$product = new Product();
+	$product->get((int)$idproduct);
+	$category->addProduct($product);
+	header("Location: /ecommerce/admin/categories/" . $idcategory . "/product/");
+	exit; 
+});
+
+
+$app->get("/admin/categories/:idcategory/product/:idproduct/remove/", function($idcategory, $idproduct){
+	User::verifyLogin();
+	$category = new Category();
+	$category->get((int)$idcategory);
+	$product = new Product();
+	$product->get((int)$idproduct);
+	$category->removeProduct($product);
+	header("Location: /ecommerce/admin/categories/" . $idcategory . "/product/");
+	exit; 
+});
+
 
 $app->get("/admin/product/", function(){
 	User::verifyLogin();
