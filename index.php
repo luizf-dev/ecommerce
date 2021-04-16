@@ -8,6 +8,7 @@ use \Hcode\PageAdmin;
 use \Hcode\Model\User;
 use \Hcode\Model\Category;
 use \Hcode\Model\Product;
+use \Hcode\Model\Cart;
 
 $app = new Slim();
 
@@ -54,6 +55,12 @@ $app->get("/product/:desurl/", function($desurl){
 	]);
 });
 
+$app->get("/cart/", function(){
+
+	$cart = Cart::getFromSession();
+	$page = new Page();
+	$page->setTpl("cart");
+});
 
 $app->get('/admin/', function() {
 	User::verifyLogin();

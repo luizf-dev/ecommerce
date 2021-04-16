@@ -79,13 +79,13 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="logo">
-                        <h1><a href="#"><img src="/ecommerce/resources/site/img/logo.png"></a></h1>
+                        <h1><a href="/ecommerce/"><img src="/ecommerce/resources/site/img/logo.png"></a></h1>
                     </div>
                 </div>
                 
                 <div class="col-sm-6">
                     <div class="shopping-item">
-                        <a href="carrinho.html">Carrinho - <span class="cart-amunt">R$100</span> <i class="fa fa-shopping-cart"></i> <span class="product-count">5</span></a>
+                        <a href="/ecommerce/cart/">Carrinho - <span class="cart-amunt">R$100</span> <i class="fa fa-shopping-cart"></i> <span class="product-count">5</span></a>
                     </div>
                 </div>
             </div>
@@ -107,7 +107,7 @@
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="/ecommerce/">Home</a></li>
                         <li><a href="#">Produtos</a></li>
-                        <li><a href="#">Carrinho</a></li>
+                        <li><a href="/ecommerce/cart/">Carrinho</a></li>
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Categorias</a>
                             <ul class="dropdown-menu">
