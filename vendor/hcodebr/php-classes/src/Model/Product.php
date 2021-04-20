@@ -41,7 +41,7 @@ class Product extends Model{
 
     public function get($idproduct){
         $sql = new Sql();
-       $results =  $sql->select("select * from tb_products where idproduct like :idproduct", [
+       $results =  $sql->select("select * from tb_products where idproduct = :idproduct", [
             ":idproduct"=>$idproduct
         ]);
 
