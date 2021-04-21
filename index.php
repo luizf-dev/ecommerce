@@ -16,6 +16,7 @@ $app->config('debug', true);
 
 require_once("functions.php");
 
+//INDEX DA HOME DO  SITE
 $app->get('/', function() {
 	$products = Product::listAll();
  
@@ -25,6 +26,8 @@ $app->get('/', function() {
 	]);
 });
 
+
+//PAGINAÇÃO DAS CATEGORIAS
 $app->get("/categories/:idcategory/", function($idcategory){
 	$page = (isset($_GET['page'])) ? (int)$_GET['page'] : 1;
 	$category = new Category();
@@ -45,6 +48,7 @@ $app->get("/categories/:idcategory/", function($idcategory){
 	]);
 });
 
+// DETALHES DO PRODUTO
 $app->get("/product/:desurl/", function($desurl){
 	$product = new Product();
 	$product->getFromURL($desurl);
@@ -55,13 +59,15 @@ $app->get("/product/:desurl/", function($desurl){
 	]);
 });
 
+//CARRINHO DE COMPRAS 
 $app->get("/cart/", function(){
 
 	$cart = Cart::getFromSession();
 	$page = new Page();
 	$page->setTpl("cart", [
 		"cart"=>$cart->getValues(),
-		"products"=>$cart->getProducts()
+		"products"=>$cart->getProducts(),
+		"error"=>Cart::getMsgError()
 	]);
 });
 
@@ -99,6 +105,17 @@ $app->get("/cart/:idproduct/remove/", function($idproduct){
 	$product->get((int)$idproduct);
 	$cart = Cart::getFromSession();
 	$cart->removeProduct($product, true);
+	header("Location: /ecommerce/cart/");
+	exit;
+});
+
+//CALCULO DE FRETE
+$app->post("/cart/freight/", function(){
+
+	$cart = Cart::getFromSession();
+
+	$cart->setFreight($_POST['zipcode']);
+
 	header("Location: /ecommerce/cart/");
 	exit;
 });
