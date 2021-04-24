@@ -279,12 +279,12 @@ class User extends Model{
         $_SESSION[User::ERROR] = NULL;
     }
 
-    public static function checkLoginExist($login){
+    public static function checkLoginExist($email){
 
         $sql = new Sql();
 
-        $results = $sql->select("select * from tb_users where deslogin = :deslogin", [
-            ":deslogin"=>$login
+        $results = $sql->select("select * from tb_persons where desemail = :desemail", [
+            ":desemail"=>$email
         ]);
 
         return (count($results) > 0);

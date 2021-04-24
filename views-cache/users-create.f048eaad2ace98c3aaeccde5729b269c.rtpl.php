@@ -12,6 +12,7 @@
   </ol>
 </section>
 
+
 <!-- Main content -->
 <section class="content">
 
@@ -21,6 +22,12 @@
         <div class="box-header with-border">
           <h3 class="box-title">Novo Usuário</h3>
         </div>
+        
+        <?php if( $error != '' ){ ?>
+        <div class="alert alert-danger">
+            <?php echo htmlspecialchars( $error, ENT_COMPAT, 'UTF-8', FALSE ); ?>
+        </div>
+        <?php } ?>
         <!-- /.box-header -->
         <!-- form start -->
         <form role="form" action="/ecommerce/admin/users/create/" method="post">

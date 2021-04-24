@@ -217,7 +217,67 @@ $app->post("/register/", function(){
 
 });
 
+//ESQUECEU A SENHA SITE
+$app->get("/forgot/", function(){
+	$page = new Page();
+	$page->setTpl("forgot");
+});
 
+//ESQUECEU A SENHA SITE
+$app->post("/forgot/", function(){
+	
+	$user = User::getForgot($_POST["email"], false);
+	header("Location: /ecommerce/forgot/sent/");
+	exit;
+});
+
+//ESQUECEU A SENHA SITE
+$app->get("/forgot/sent/", function(){
+	$page = new Page();
+	$page->setTpl("forgot-sent");
+});
+
+//ESQUECEU A SENHA SITE
+$app->get("/forgot/reset", function(){
+	$user = User::recuperarSenha($_GET["code"]);	 
+	$page = new Page();
+	$page->setTpl("forgot-reset" , array(
+		"name"=>$user["desperson"],
+		"code"=>$_GET["code"]
+	));
+});
+
+//ESQUECEU A SENHA SITE
+$app->post("/forgot/reset/", function(){
+
+	$forgot = User::recuperarSenha($_POST["code"]);	
+
+	User::setFogotUsed($forgot["idrecovery"]);
+
+	$user = new User();
+
+	$user->get((int)$forgot["iduser"]);
+
+	$password = User::getPasswordHash($_POST['password']);
+
+	$user->setPassword($password);
+
+	$page = new Page();
+
+	$page->setTpl("forgot-reset-success");
+});
+
+
+
+
+
+
+
+
+
+
+
+//daqui para baixo parte do admin/////
 $app->get('/admin/', function() {
 	User::verifyLogin();
 
@@ -261,19 +321,30 @@ $app->get("/admin/users/", function(){
 
 $app->get("/admin/users/create/", function(){
 	User::verifyLogin();
-	$page = new PageAdmin();
-	$page->setTpl("users-create");
+ 
+    $page = new PageAdmin();
+ 
+    $page->setTpl("users-create", array(
+        "error" => User::getError()
+    ));
 });
 
-$app->get("/admin/users/:iduser/delete/", function($iduser){
-	User::verifyLogin();
+
+$app->get("/admin/users/:iduser/delete/", function($iduser) {
+
+	User::verifyLogin();	
+
 	$user = new User();
+
 	$user->get((int)$iduser);
+
 	$user->delete();
+
 	header("Location: /ecommerce/admin/users/");
 	exit;
 
 });
+
 
 $app->get("/admin/users/:iduser/", function($iduser){
 	User::verifyLogin();
@@ -288,6 +359,14 @@ $app->get("/admin/users/:iduser/", function($iduser){
 $app->post("/admin/users/create/", function(){
 	User::verifyLogin();
 	$user = new User();
+
+	if (User::checkLoginExist($_POST['desemail']) === true) {
+ 
+        User::setError("Este endereço de e-mail já está cadastrado.");
+        header("Location: /admin/users/create/");
+        exit; 
+    }
+
 	$_POST["inadmin"] = (isset($_POST["inadmin"]))?1:0;
 	$_POST['despassword'] = password_hash($_POST["despassword"], PASSWORD_DEFAULT, [
 		"cost"=>12
