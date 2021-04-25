@@ -184,7 +184,7 @@ class User extends Model{
                 $code = openssl_encrypt($dataRecovery['idrecovery'], 'AES-128-CBC', pack("a16", User::SECRET), 0, pack("a16", User::SECRET_IV));
                 $code = base64_encode($code);
 
-				/*$link = "http://localhost/ecommerce/admin/forgot/reset?code=$code";*/
+				
                 if ($inadmin === true) {
 
 					$link = "http://localhost/ecommerce/admin/forgot/reset?code=$code";
@@ -261,6 +261,7 @@ class User extends Model{
 
 	}
 
+    //MÉTODOS PARA MENSAGENS DE ERRO//************************************/
     public static function setError($msg){
 
         $_SESSION[User::ERROR] = $msg;
@@ -278,6 +279,29 @@ class User extends Model{
 
         $_SESSION[User::ERROR] = NULL;
     }
+    //ATÉ AQUI//MÉTODOS PARA MENSAGENS DE ERRO//************************************/
+    
+
+    //MÉTODOS PARA MENSAGENS DE SUCESSO//************************************/
+    public static function setSuccess($msg){
+
+        $_SESSION[User::SUCCESS] = $msg;
+    }
+
+    public static function getSuccess(){
+        
+        $msg =  (isset($_SESSION[User::SUCCESS]) && $_SESSION[User::SUCCESS]) ? $_SESSION[User::SUCCESS] : "";           
+
+        User::clearSuccess();
+        return $msg;
+    }
+
+    public static function clearSuccess(){
+
+        $_SESSION[User::SUCCESS] = NULL;
+    }
+     //ATÉ AQUI //MÉTODOS PARA MENSAGENS DE SUCESSO//************************************/
+
 
     public static function checkLoginExist($email){
 
