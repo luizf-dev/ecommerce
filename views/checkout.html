@@ -16,14 +16,16 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="product-content-right">
-					<form action="/checkout" class="checkout" method="post" name="checkout">
+					<form action="/ecommerce/checkout/" class="checkout" method="post" name="checkout">
 						<div id="customer_details" class="col2-set">
 							<div class="row">
 								<div class="col-md-12">
 
+									{if="$error != ''"}
 									<div class="alert alert-danger">
-										Error!
+										{$error}
 									</div>
+									{/if}
 
 									<div class="woocommerce-billing-fields">
 										<h3>Endereço de entrega</h3>
@@ -31,7 +33,7 @@
 											<label class="" for="billing_address_1">Cep <abbr title="required" class="required">*</abbr>
 											</label>
                                             <input type="text" value="{$cart.deszipcode}" placeholder="00000-000" id="billing_address_1" name="zipcode" class="input-text ">
-                                            <input type="submit" value="Atualizar CEP" id="place_order" class="button alt" formaction="/checkout" formmethod="get">
+                                            <input type="submit" value="Atualizar CEP" id="place_order" class="button alt" formaction="/ecommerce/checkout/" formmethod="get">
 										</p>
 										<p id="billing_address_1_field" class="form-row form-row-wide address-field validate-required">
 											<label class="" for="billing_address_1">Endereço <abbr title="required" class="required">*</abbr>
@@ -71,32 +73,36 @@
 												</thead>
 												<tbody>
                                                     
+													{loop="$product"}
 													<tr class="cart_item">
-														<td class="product-name">
-															Ship Your Idea <strong class="product-quantity">× 1</strong> 
+														
+														<td class="product-name">															
+															<a href="/ecommerce/product/{$value.desurl}/"><img width="70" height="70" alt="poster_1_up" class="shop_thumbnail" src="{$value.desphoto}"></a>   															
+															{$value.desproduct} <strong class="product-quantity">x {$value.nrqtd}</strong> 
 														</td>
+													
 														<td class="product-total">
-															<span class="amount">$700.00</span>
+															<span class="amount">R$ {function="formatPrice($value.vltotal)"}</span>
 														</td>
                                                     </tr>
+													{/loop}
                                                     
 												</tbody>
 												<tfoot>
 													<tr class="cart-subtotal">
 														<th>Subtotal</th>
-														<td><span class="amount">$700.00</span>
-														</td>
+														<td><span class="amount">R$ {function="formatPrice($cart.vlsubtotal)"} </span></td>
 													</tr>
 													<tr class="shipping">
 														<th>Frete</th>
 														<td>
-															$5.00
+															R$ {function="formatPrice($cart.vlfreight)"} 
 															<input type="hidden" class="shipping_method" value="free_shipping" id="shipping_method_0" data-index="0" name="shipping_method[0]">
 														</td>
 													</tr>
 													<tr class="order-total">
 														<th>Total do Pedido</th>
-														<td><strong><span class="amount">$705.00</span></strong> </td>
+														<td><strong><span class="amount">R$ {function="formatPrice($cart.vltotal)"} </span></strong> </td>
 													</tr>
 												</tfoot>
 											</table>

@@ -125,14 +125,94 @@ $app->post("/cart/freight/", function(){
 $app->get("/checkout/", function(){
 
 	User::verifyLogin(false);
-
-	$cart = Cart::getFromSession();
 	$address = new Address();
+	$cart = Cart::getFromSession();
+
+	if(isset($_GET['zipcode'])){
+
+		$_GET['zipcode'] = $cart->getdeszipcode();
+	}
+
+	if(isset($_GET['zipcode'])){
+		$address->loadFromCEP($_GET['zipcode']);
+		$cart->setdeszipcode($_GET['zipcode']);
+		$cart->save();
+		$cart->getCalculateTotal();
+	}
+
+	if (!$address->getdesaddress()) $address->setdesaddress('');
+	if (!$address->getdescomplement()) $address->setdescomplement('');
+	if (!$address->getdesdistrict()) $address->setdesdistrict('');
+	if (!$address->getdescity()) $address->setdescity('');
+	if (!$address->getdesstate()) $address->setdesstate('');
+	if (!$address->getdescountry()) $address->setdescountry('');
+	if (!$address->getdeszipcode()) $address->setdeszipcode('');
+
 	$page = new Page();
 	$page->setTpl("checkout", [
 		"cart"=>$cart->getValues(),
-		"address"=>$address->getValues()
+		"address"=>$address->getValues(),
+		"product"=>$cart->getProducts(),
+		"error"=>Address::getMsgError()
 	]);
+});
+
+//FINALIZANDO E SALVANDO O ENDEREÇO NO BANCO DE DADOS
+$app->post("/checkout/", function(){
+
+	User::verifyLogin(false);
+
+	if(!isset($_POST['zipcode']) || $_POST['zipcode'] === ""){
+
+		Address::setMsgError("Por favor informe o CEP!");
+		header("Location: /ecommerce/checkout/");
+		exit;
+	}
+
+	if(!isset($_POST['desaddress']) || $_POST['desaddress'] === ""){
+
+		Address::setMsgError("Por favor informe o endereço!");
+		header("Location: /ecommerce/checkout/");
+		exit;
+	}
+
+	if(!isset($_POST['desdistrict']) || $_POST['desdistrict'] === ""){
+
+		Address::setMsgError("Por favor informe o bairro!");
+		header("Location: /ecommerce/checkout/");
+		exit;
+	}
+
+	if(!isset($_POST['descity']) || $_POST['descity'] === ""){
+
+		Address::setMsgError("Por favor informe a cidade!");
+		header("Location: /ecommerce/checkout/");
+		exit;
+	}
+
+	if(!isset($_POST['desstate']) || $_POST['desstate'] === ""){
+
+		Address::setMsgError("Por favor informe o estado!");
+		header("Location: /ecommerce/checkout/");
+		exit;
+	}
+
+	if(!isset($_POST['descountry']) || $_POST['descountry'] === ""){
+
+		Address::setMsgError("Por favor informe o país!");
+		header("Location: /ecommerce/checkout/");
+		exit;
+	}
+
+	$user = User::getFromSession();
+	$address = new Address();
+	$_POST['deszipcode'] = $_POST['zipcode'];
+	$_POST['idperson'] = $user->getidperson();
+
+	$address->setData($_POST);
+	$address->save();
+	header("Location: /ecommerce/");
+	exit;
 });
 
 //TEMPLATE DE LOGIN DO SITE

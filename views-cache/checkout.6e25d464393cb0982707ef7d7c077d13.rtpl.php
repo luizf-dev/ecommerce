@@ -17,14 +17,19 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="product-content-right">
-					<form action="/checkout" class="checkout" method="post" name="checkout">
+					<form action="/ecommerce/checkout/" class="checkout" method="post" name="checkout">
 						<div id="customer_details" class="col2-set">
 							<div class="row">
 								<div class="col-md-12">
 
+									<?php if( $error != '' ){ ?>
+
 									<div class="alert alert-danger">
-										Error!
+										<?php echo htmlspecialchars( $error, ENT_COMPAT, 'UTF-8', FALSE ); ?>
+
 									</div>
+									<?php } ?>
+
 
 									<div class="woocommerce-billing-fields">
 										<h3>Endereço de entrega</h3>
@@ -32,7 +37,7 @@
 											<label class="" for="billing_address_1">Cep <abbr title="required" class="required">*</abbr>
 											</label>
                                             <input type="text" value="<?php echo htmlspecialchars( $cart["deszipcode"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="00000-000" id="billing_address_1" name="zipcode" class="input-text ">
-                                            <input type="submit" value="Atualizar CEP" id="place_order" class="button alt" formaction="/checkout" formmethod="get">
+                                            <input type="submit" value="Atualizar CEP" id="place_order" class="button alt" formaction="/ecommerce/checkout/" formmethod="get">
 										</p>
 										<p id="billing_address_1_field" class="form-row form-row-wide address-field validate-required">
 											<label class="" for="billing_address_1">Endereço <abbr title="required" class="required">*</abbr>
@@ -72,32 +77,38 @@
 												</thead>
 												<tbody>
                                                     
+													<?php $counter1=-1;  if( isset($product) && ( is_array($product) || $product instanceof Traversable ) && sizeof($product) ) foreach( $product as $key1 => $value1 ){ $counter1++; ?>
+
 													<tr class="cart_item">
-														<td class="product-name">
-															Ship Your Idea <strong class="product-quantity">× 1</strong> 
+														
+														<td class="product-name">															
+															<a href="/ecommerce/product/<?php echo htmlspecialchars( $value1["desurl"], ENT_COMPAT, 'UTF-8', FALSE ); ?>/"><img width="70" height="70" alt="poster_1_up" class="shop_thumbnail" src="<?php echo htmlspecialchars( $value1["desphoto"], ENT_COMPAT, 'UTF-8', FALSE ); ?>"></a>   															
+															<?php echo htmlspecialchars( $value1["desproduct"], ENT_COMPAT, 'UTF-8', FALSE ); ?> <strong class="product-quantity">x <?php echo htmlspecialchars( $value1["nrqtd"], ENT_COMPAT, 'UTF-8', FALSE ); ?></strong> 
 														</td>
+													
 														<td class="product-total">
-															<span class="amount">$700.00</span>
+															<span class="amount">R$ <?php echo formatPrice($value1["vltotal"]); ?></span>
 														</td>
                                                     </tr>
+													<?php } ?>
+
                                                     
 												</tbody>
 												<tfoot>
 													<tr class="cart-subtotal">
 														<th>Subtotal</th>
-														<td><span class="amount">$700.00</span>
-														</td>
+														<td><span class="amount">R$ <?php echo formatPrice($cart["vlsubtotal"]); ?> </span></td>
 													</tr>
 													<tr class="shipping">
 														<th>Frete</th>
 														<td>
-															$5.00
+															R$ <?php echo formatPrice($cart["vlfreight"]); ?> 
 															<input type="hidden" class="shipping_method" value="free_shipping" id="shipping_method_0" data-index="0" name="shipping_method[0]">
 														</td>
 													</tr>
 													<tr class="order-total">
 														<th>Total do Pedido</th>
-														<td><strong><span class="amount">$705.00</span></strong> </td>
+														<td><strong><span class="amount">R$ <?php echo formatPrice($cart["vltotal"]); ?> </span></strong> </td>
 													</tr>
 												</tfoot>
 											</table>
