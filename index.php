@@ -222,7 +222,7 @@ $app->post("/checkout/", function(){
 		"iduser"=>$user->getiduser(),
 		"idstatus"=>OrderStatus::EM_ABERTO,
 		"vltotal"=>$cart->getvltotal()
-		/*"vltotal"=>$totals['vlprice'] + $cart->getvlfreight()*/
+		
 	]);
 
 	$order->save();
@@ -415,6 +415,7 @@ $app->post("/profile/", function(){
 	exit;
 });
 
+//FINALIZAR COMPRA 
 $app->get("/order/:idorder/", function($idorder){
 
 	User::verifyLogin(false);
@@ -427,6 +428,7 @@ $app->get("/order/:idorder/", function($idorder){
 	]);
 });
 
+//GERAR BOLETO // VARIÁVEIS PARA GERAÇÃO DO BOLETO
 $app->get("/boleto/:idorder/", function($idorder){
 
 	User::verifyLogin(false);
@@ -436,9 +438,10 @@ $app->get("/boleto/:idorder/", function($idorder){
 // DADOS DO BOLETO PARA O SEU CLIENTE
 $dias_de_prazo_para_pagamento = 10;
 $taxa_boleto = 5.00;
-$data_venc = date("d/m/Y"); /*date("d/m/Y", time() + ($dias_de_prazo_para_pagamento * 86400));  // Prazo de X dias OU informe data: "13/04/2006"; */
-$valor_cobrado = 1.500; /*formatPrice($order->getvltotal()); // Valor - REGRA: Sem pontos na milhar e tanto faz com "." ou "," ou com 1 ou 2 ou sem casa decimal*/
-/*$valor_cobrado = str_replace(",", ".",$valor_cobrado);*/
+$data_venc = date("d/m/Y", time() + ($dias_de_prazo_para_pagamento * 86400));  // Prazo de X dias OU informe data: "13/04/2006"; 
+$valor_cobrado = formatPrice($order->getvltotal()); // Valor - REGRA: Sem pontos na milhar e tanto faz com "." ou "," ou com 1 ou 2 ou sem casa decimal
+$valor_cobrado = str_replace(".", "", $valor_cobrado);
+$valor_cobrado = str_replace(",", ".", $valor_cobrado);
 $valor_boleto = number_format($valor_cobrado + $taxa_boleto, 2, ',', '');
 
 $dadosboleto["nosso_numero"] = $order->getidorder();  // Nosso numero - REGRA: Máximo de 8 caracteres!
@@ -450,8 +453,8 @@ $dadosboleto["valor_boleto"] = $valor_boleto; 	// Valor do Boleto - REGRA: Com v
 
 // DADOS DO SEU CLIENTE
 $dadosboleto["sacado"] = $order->getdesperson();
-$dadosboleto["endereco1"] = $order->getdesaddress() . "-" . $order->getdesdistrict();
-$dadosboleto["endereco2"] = $order->getdescity() . "-" . $order->getdesstate() . "-" . $order->getdescountry() . "- CEP:" .  $order->getdeszipcode();
+$dadosboleto["endereco1"] = $order->getdesaddress() . " - " . $order->getdesdistrict();
+$dadosboleto["endereco2"] = $order->getdescity() . " - " . $order->getdesstate() . " - " . $order->getdescountry() . " - CEP : " .  $order->getdeszipcode();
 
 // INFORMACOES PARA O CLIENTE
 $dadosboleto["demonstrativo1"] = "Pagamento de Compra na Loja Hcode E-commerce";
@@ -499,19 +502,36 @@ $path = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR  . "ecommerce" . DIRECTO
 require_once("resources/boletophp/include/funcoes_itau.php");
 require_once("resources/boletophp/include/layout_itau.php");
 
+});
 
+//MEUS PEDIDOS
+$app->get("/profile/orders/", function(){
 
-
-/*include("include/funcoes_itau.php"); 
-include("include/layout_itau.php");*/
-
-
-
-
+	User::verifyLogin(false);
+	$user = User::getFromSession();
+	$page = new Page();
+	$page->setTpl("profile-orders", [
+		"orders"=>$user->getOrders()
+	]);
 
 });
 
+//DETALHES DO PEDIDO
+$app->get("/profile/orders/:idorder/", function($idorder){
 
+	User::verifyLogin(false);
+	$order = new Order();
+	$order->get((int)$idorder);
+	$cart = new Cart();
+	$cart->get((int)$order->getidcart());
+	$cart->getCalculateTotal();
+	$page = new Page();
+	$page->setTpl("profile-orders-detail", [
+		"order"=>$order->getValues(),
+		"cart"=>$cart->getValues(),
+		"products"=>$cart->getProducts()
+	]);
+});
 
 
 

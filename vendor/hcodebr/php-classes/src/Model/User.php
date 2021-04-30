@@ -337,6 +337,30 @@ class User extends Model{
         $_SESSION[User::ERROR_REGISTER] = NULL;
     }
 
+    public function getOrders(){
+
+        $sql = new Sql();
+
+        $results = $sql->select("
+        select * from tb_orders a
+        inner join tb_ordersstatus b 
+        using (idstatus)
+        inner join tb_carts c 
+        using(idcart)
+        inner join tb_users d 
+        on d.iduser = a.iduser 
+        inner join tb_addresses e 
+        using(idaddress)
+        inner join tb_persons f
+        on f.idperson = d.idperson
+        where a.iduser = :iduser", [
+
+            ":iduser"=>$this->getiduser()
+        ]);
+
+        return $results;
+    }
+
     
 }
 
