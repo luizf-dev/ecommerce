@@ -141,7 +141,8 @@ class User extends Model{
         ":iduser"=>$this->getiduser(),
         ":desperson"=>utf8_decode($this->getdesperson()),
         ":deslogin"=>$this->getdeslogin(),
-        ":despassword"=>$this->getdespassword(),
+        //AQUI ADICIONEI O MÉTODO getPasswordHash() antes do getdespassword(), pois a senha não estava criptografando no banco.
+        ":despassword"=>User::getPasswordHash($this->getdespassword()), /*$this->getdespassword(),*/ 
         ":desemail"=>$this->getdesemail(),
         ":nrphone"=>$this->getnrphone(),
         ":inadmin"=>$this->getinadmin()

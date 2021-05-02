@@ -533,6 +533,78 @@ $app->get("/profile/orders/:idorder/", function($idorder){
 	]);
 });
 
+//ALTERAR SENHA 
+$app->get("/profile/change-password/", function(){
+
+	User::verifyLogin(false);
+	$page = new Page();
+	$page->setTpl("profile-change-password", [
+		"changePassError"=>User::getError(),
+		"changePassSuccess"=>User::getSuccess()
+	]);
+});
+
+//ALTERAR SENHA 
+$app->post("/profile/change-password/", function(){
+	User::verifyLogin(false);
+
+	//verifica se foi digitada a senha atual ou não está passando o campo vazio//
+	if(!isset($_POST['current_pass'])  || $_POST["current_pass"] === ""){
+
+		User::setError("Digite a senha atual!");
+		header("Location: /ecommerce/profile/change-password/");
+		exit;
+	}
+
+
+	//verifica a nova senha a ser definida//
+	if(!isset($_POST['new_pass'])  || $_POST["new_pass"] === ""){
+
+		User::setError("Digite a nova senha!");
+		header("Location: /ecommerce/profile/change-password/");
+		exit;
+	}
+	
+	//confirma a nova senha a ser definida//
+	if(!isset($_POST['new_pass_confirm'])  || $_POST["new_pass_confirm"] === ""){
+
+		User::setError("Confirme a nova senha!");
+		header("Location: /ecommerce/profile/change-password/");
+		exit;
+	}
+		//verifica se a senha de confirmaçao é igual a nova senha!
+		if ($_POST['new_pass'] != $_POST['new_pass_confirm']) {
+		
+			User::setError("A senha de confirmação deve ser igual a nova senha!!");
+			header("Location: /ecommerce/profile/change-password/");
+			exit;
+			}
+
+	//confirma a nova senha a ser definida//
+	if($_POST['current_pass']  ===  $_POST["new_pass"]){
+
+		User::setError("Sua nova senha deve ser diferente da atual!");
+		header("Location: /ecommerce/profile/change-password/");
+		exit;
+	}
+	
+
+	$user = User::getFromSession();
+	if(!password_verify($_POST['current_pass'], $user->getdespassword())){
+
+		User::setError("Sua senha está inválida!! ");
+		header("Location: /ecommerce/profile/change-password/");
+		exit;
+	}
+
+	$user->setdespassword($_POST['new_pass']);
+	$user->update();
+	$_SESSION[User::SESSION] = $user->getValues();	
+	User::setSuccess("Senha alterada com sucesso!!");
+	header("Location: /ecommerce/profile/change-password/");
+	exit;
+});
+
 
 
 
