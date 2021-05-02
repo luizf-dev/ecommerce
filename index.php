@@ -18,6 +18,7 @@ $app = new Slim();
 $app->config('debug', true);
 
 require_once("functions.php");
+require_once("admin-orders.php");
 
 //INDEX DA HOME DO  SITE
 $app->get('/', function() {

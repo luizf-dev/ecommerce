@@ -259,6 +259,8 @@ desired effect
         <li><a href="/ecommerce/admin/users/"><i class="fa fa-users"></i> <span>USUÁRIOS</span></a></li>
         <li><a href="/ecommerce/admin/categories/"><i class="fa fa-tags"></i> <span>CATEGORIAS</span></a></li>
         <li><a href="/ecommerce/admin/product/"><i class="fa fa-link"></i> <span>PRODUTOS</span></a></li>
+        <li><a href="/ecommerce/admin/orders/"><i class="fa fa-shopping-cart"></i> <span>PEDIDOS</span></a></li>
+
         <li class="treeview">
           <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
             <span class="pull-right-container">
