@@ -255,9 +255,7 @@ z-index: 999;}
 .block-slider .caption-group .primary{
 	color: #1bd172;
 }
-.block-slider .caption-group .caption{
-
-}
+/*.block-slider .caption-group .caption{}*/
 
 /*----------------------
 [10. Block top seller ]
@@ -363,8 +361,8 @@ z-index: 999;}
 .single-promo:hover {color: #fff;background: #222;}
 .promo1 { background:#e67e22;}
 .promo2 { background:#08bb70;}
-.promo3 { background:#fa8072;}
-.promo4 { background:#4abebd;}
+.promo3 { background:#686362;}
+.promo4 { background:#145352;}
 .section-title {
   font-family: "Raleway",sans-serif;
   font-size: 50px;
@@ -443,7 +441,8 @@ z-index: 999;}
 .single-product {
   overflow: hidden;
 }
-.single-product:hover {}
+
+/*.single-product:hover {}*/
 .single-product:hover .product-hover a.add-to-cart-link {top: 32%;}
 .single-product:hover .product-hover a.view-details-link {bottom: 32%;}
 .single-product:hover .product-hover:after{left: 0}
@@ -617,7 +616,10 @@ padding: 35px 0 180px;}
 .newsletter-form {
     margin-top: 25px;
 }
+
+
 a {color: #e67e22}
+
 a:hover, a:focus {color: #17a78b}
 .footer-bottom-area {
   background: none repeat scroll 0 0 #000;
@@ -982,8 +984,8 @@ div.cart-collaterals ul.products li.product {
 .cart_totals table th {
     background: none repeat scroll 0 0 #f4f4f4;
 }
-.onsale {
-}
+/*.onsale {}*/
+
 div.cart-collaterals ul.products li.product .onsale {
     background: none repeat scroll 0 0 #e67e22;
     color: #fff;
@@ -1002,8 +1004,8 @@ div.cart-collaterals ul.products li.product .price {
     margin-bottom: 10px;
     overflow: hidden;
 }
-.price > ins {
-}
+/*.price > ins {}*/
+
 div.cart-collaterals ul.products li.product .price ins {
     color: #e67e22;
     font-weight: 700;

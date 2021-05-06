@@ -184,8 +184,8 @@ desired effect
                 <img src="/ecommerce/resources/admin/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
 
                 <p>
-                  Luiz Fernando - Web Developer
-                  <small>Member since Nov. 2012</small>
+                  <span class="hidden-xs"><?php echo getUserName(); ?></span> - <br> Web Developer
+                  <small>Member since <?php echo getUserDateRegister(); ?> </small>
                 </p>
               </li>
               <!-- Menu Body -->

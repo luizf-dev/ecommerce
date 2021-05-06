@@ -606,15 +606,11 @@ $app->post("/profile/change-password/", function(){
 	exit;
 });
 
+/***************************************************
+ * ************************************************
+ * **********************************************
+ //ADMIN DAQUI PARA BAIXO*/
 
-
-
-
-
-
-
-
-//daqui para baixo parte do admin/////
 $app->get('/admin/', function() {
 	User::verifyLogin();
 
@@ -649,10 +645,35 @@ $app->get('/admin/logout/', function(){
 
 $app->get("/admin/users/", function(){
 	User::verifyLogin();
-	$users = User::listAll();
+
+	$search = (isset($_GET['search'])) ? $_GET['search'] : "";
+	$page = (isset($_GET['page']))? (int)$_GET['page'] : 1;
+
+	if($search != ''){
+		$pagination = User::getPageSearch($search, $page);
+
+
+	}else{
+		$pagination = User::getPage($page);
+	}
+
+	$pages = [];
+
+	for($x = 0; $x < $pagination['pages']; $x++){
+		array_push($pages, [
+			'href'=>"/ecommerce/admin/users/?" .http_build_query([
+				'page'=>$x + 1,
+				'search'=>$search
+			]),
+			'text'=>$x + 1
+		]);
+	}
+
 	$page = new PageAdmin();
 	$page->setTpl("users", array(
-		"users"=>$users
+		"users"=>$pagination['data'],
+		"search"=>$search,
+		"pages"=>$pages
 	));
 });
 

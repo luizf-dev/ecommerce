@@ -29,6 +29,14 @@ function getUserName(){
     return $user->getdesperson();
 }
 
+
+function getUserDateRegister(){
+
+    $user = User::getFromSession();
+    
+    return $user->getdtregister();
+}
+
 function getCartNrQtd(){
     $cart = Cart::getFromSession();
     $totals = $cart->getProductsTotals();
@@ -40,3 +48,4 @@ function getCartVlSubtotal(){
     $totals = $cart->getProductsTotals();
     return formatPrice($totals['vlprice']);
 }
+

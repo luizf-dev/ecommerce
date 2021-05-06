@@ -82,7 +82,7 @@ class Category extends Model{
         }
     }
 
-    public function getProductsPage($page = 1, $itemsPorPage = 1){
+    public function getProductsPage($page = 1, $itemsPorPage = 4){
 
         $start = ($page - 1) * $itemsPorPage;
         $sql = new Sql();

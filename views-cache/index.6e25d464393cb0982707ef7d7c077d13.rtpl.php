@@ -57,7 +57,7 @@
         <div class="col-md-3 col-sm-6">
             <div class="single-promo promo2">
                 <i class="fa fa-truck"></i>
-                <p>Frete grátis</p>
+                <p><a href="/ecommerce/categories/10/" style="color: #fff" >Frete grátis</a></p>
             </div>
         </div>
         <div class="col-md-3 col-sm-6">
@@ -67,10 +67,12 @@
             </div>
         </div>
         <div class="col-md-3 col-sm-6">
+           
             <div class="single-promo promo4">
                 <i class="fa fa-gift"></i>
-                <p>Novos produtos</p>
+                <p><a class="category-link" href="/ecommerce/categories/11/" style="color: #fff">Novidades</a></p>
             </div>
+            </a>
         </div>
     </div>
 </div>
