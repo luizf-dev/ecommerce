@@ -6,8 +6,8 @@
     Lista de Produtos
   </h1>
   <ol class="breadcrumb">
-    <li><a href="/admin"><i class="fa fa-dashboard"></i> Home</a></li>
-    <li class="active"><a href="/admin/products">Produtos</a></li>
+    <li><a href="/ecommerce/admin/"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li class="active"><a href="/ecommerce/admin/product/">Produtos</a></li>
   </ol>
 </section>
 
@@ -20,6 +20,16 @@
             
             <div class="box-header">
               <a href="/ecommerce/admin/product/create/" class="btn btn-success">Cadastrar Produto</a>
+              <div class="box-tools">
+                <form action="/ecommerce/admin/product/">
+                  <div class="input-group input-group-sm" style="width: 150px;">
+                    <input type="text" name="search" class="form-control pull-right" placeholder="Search" value="{$search}">
+                    <div class="input-group-btn">
+                      <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                    </div>
+                  </div>
+                </form>
+              </div>
             </div>
 
             <div class="box-body no-padding">
@@ -56,6 +66,13 @@
               </table>
             </div>
             <!-- /.box-body -->
+            <div class="box-footer clearfix">
+              <ul class="pagination pagination-sm no-margin pull-right">
+                {loop="$pages"}
+                <li><a href="{$value.href}">{$value.text}</a></li>
+                {/loop}
+              </ul>
+            </div>
           </div>
   	</div>
   </div>
