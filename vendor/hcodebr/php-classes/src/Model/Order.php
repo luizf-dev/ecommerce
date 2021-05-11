@@ -130,6 +130,57 @@ class Order extends Model{
 
 
 
+     //PAGINAÇÃO DOs PEDIDOS
+     public static function getPage($page = 1, $itemsPorPage = 10){
+
+        $start = ($page - 1) * $itemsPorPage;
+        $sql = new Sql();
+        $results = $sql->select("
+            select SQL_CALC_FOUND_ROWS * 
+            from tb_orders a
+            inner join tb_ordersstatus b using (idstatus)
+            inner join tb_carts c using(idcart)
+            inner join tb_users d on d.iduser = a.iduser 
+            inner join tb_addresses e using(idaddress)
+            inner join tb_persons f on f.idperson = d.idperson
+            order by a.dtregister desc   
+            limit $start, $itemsPorPage;");
+
+       $resultTotal = $sql->select("select FOUND_ROWS() as nrtotal;");
+       return [
+           "data"=>($results),
+           "total"=>(int)$resultTotal[0]["nrtotal"],
+           "pages"=>ceil($resultTotal[0]["nrtotal"] / $itemsPorPage)
+       ];
+    }
+
+    public static function getPageSearch($search, $page = 1, $itemsPorPage = 10){
+
+        $start = ($page - 1) * $itemsPorPage;
+        $sql = new Sql();
+        $results = $sql->select("
+            select SQL_CALC_FOUND_ROWS * 
+            from tb_orders a
+            inner join tb_ordersstatus b using (idstatus)
+            inner join tb_carts c using(idcart)
+            inner join tb_users d on d.iduser = a.iduser 
+            inner join tb_addresses e using(idaddress)
+            inner join tb_persons f on f.idperson = d.idperson
+            where a.idorder = :id or f.desperson like :search
+            order by a.dtregister desc   
+            limit $start, $itemsPorPage;",[
+                ":search"=>'%'.$search.'%',
+                ":id"=>$search
+            ]);
+
+       $resultTotal = $sql->select("select FOUND_ROWS() as nrtotal;");
+       return [
+           "data"=>($results),
+           "total"=>(int)$resultTotal[0]["nrtotal"],
+           "pages"=>ceil($resultTotal[0]["nrtotal"] / $itemsPorPage)
+       ];
+    }
+
 
 }
 

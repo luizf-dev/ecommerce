@@ -955,7 +955,6 @@ $app->get("/admin/product/", function(){
 		]);
 	}
 
-	$products = Product::listAll();
 	$page = new PageAdmin();
 	$page->setTpl("products", [
 		"products"=>$pagination['data'],
