@@ -229,9 +229,39 @@ $app->post("/checkout/", function(){
 
 	$order->save();
 
-	header("Location: /ecommerce/order/".$order->getidorder());
+	switch((int)$_POST['payment-method']){
+		case 1:
+			header("Location: /ecommerce/order/".$order->getidorder());
+		break;	
+
+		case 2:
+			header("Location: /ecommerce/order/".$order->getidorder()."/paypal");
+		break;				
+	}	
 	exit;
 });
+
+//ROTA DE ACESSO AO PAYPAL
+$app->get("/order/:idorder/paypal", function($idorder){
+
+	User::verifyLogin(false);
+	$order =  new Order();
+	$order->get((int)$idorder);
+	$cart = $order->getCart();
+
+	$page = new Page([
+		'header'=>false,
+		'footer'=>false
+	]);
+
+	$page->setTpl("payment-paypal",[
+		"order"=>$order->getValues(),
+		"cart"=>$cart->getValues(),
+		"products"=>$cart->getProducts()
+	]);
+});
+
+
 
 //TEMPLATE DE LOGIN DO SITE
 $app->get("/login/", function(){
